@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GEC Dahod Attendance System</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="toast" class="toast" role="alert"></div>
+
+<!-- LOGIN -->
+<section id="loginPage" class="page login-page">
+  <div class="login-card">
+    <div class="brand">
+      <div class="brand-logo">G</div>
+      <div>
+        <h1>GEC Dahod</h1>
+        <p>Smart Attendance System</p>
+      </div>
+    </div>
+
+    <div class="role-tabs">
+      <button id="studentTab" type="button" class="role-tab active">Student</button>
+      <button id="teacherTab" type="button" class="role-tab">Teacher</button>
+    </div>
+
+    <!-- Student Login -->
+    <form id="studentLoginForm" class="login-form">
+      <div class="heading">
+        <h2>Student Login</h2>
+        <p>Enter your details to continue.</p>
+      </div>
+
+      <label for="studentName">Full Name</label>
+      <input id="studentName" type="text" autocomplete="name" required>
+
+      <label for="studentEnrollment">Enrollment Number</label>
+      <input id="studentEnrollment" type="text" autocomplete="off" required>
+
+      <button class="primary-btn" type="submit">Login as Student</button>
+    </form>
+
+    <!-- Teacher Login -->
+    <form id="teacherLoginForm" class="login-form hidden">
+      <div class="heading">
+        <h2>Teacher Login</h2>
+        <p>Authorized teacher access.</p>
+      </div>
+
+      <label for="teacherName">Teacher Name</label>
+      <input id="teacherName" type="text" autocomplete="name" required>
+
+      <label for="teacherPassword">Teacher Password</label>
+      <input id="teacherPassword" type="password" autocomplete="current-password" required>
+
+      <button class="primary-btn teacher-btn" type="submit">Login as Teacher</button>
+
+      <p class="demo-hint">Demo password: <strong>gecdahod123</strong></p>
+    </form>
+
+    <div class="security-note">Demo mode • Data is stored in this browser</div>
+  </div>
+</section>
+
+<!-- STUDENT DASHBOARD -->
+<section id="studentDashboard" class="page hidden">
+  <header class="topbar student-topbar">
+    <div class="brand compact">
+      <div class="brand-logo">G</div>
+      <div>
+        <h2>GEC Dahod</h2>
+        <p>Student Portal</p>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <span id="studentHeaderName" class="user-name"></span>
+      <button id="studentLogout" type="button" class="outline-btn">Logout</button>
+    </div>
+  </header>
+
+  <main class="dashboard">
+    <section class="hero student-hero">
+      <div>
+        <div class="eyebrow">STUDENT ATTENDANCE</div>
+        <h2>Mark Your Attendance</h2>
+        <p>Use the Session ID and the 6-digit code displayed by your teacher.</p>
+      </div>
+      <div class="live-pill"><span></span> LIVE</div>
+    </section>
+
+    <div class="content-grid">
+      <section class="card">
+        <div class="card-heading">
+          <div>
+            <h3>Join Attendance Session</h3>
+            <p>Teacher code is valid for 60 seconds.</p>
+          </div>
+          <div class="icon-badge">🔒</div>
+        </div>
+
+        <label for="studentSessionId">Session ID</label>
+        <input id="studentSessionId" type="text" placeholder="Example: GEC-CE-123456" autocomplete="off">
+
+        <label for="studentCode">Teacher Code</label>
+        <input id="studentCode" class="six-code" type="text" inputmode="numeric" maxlength="6"
+               placeholder="000000" autocomplete="off">
+
+        <div id="studentTimer" class="timer neutral">Enter a session ID</div>
+
+        <button id="markAttendanceBtn" type="button" class="primary-btn">Mark Attendance</button>
+
+        <div class="small-security">
+          The displayed countdown is only a visual aid. The code is also checked against the actual session expiry in JavaScript.
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-heading">
+          <div>
+            <h3>Your Attendance</h3>
+            <p>Recent attendance records for this enrollment number.</p>
+          </div>
+        </div>
+        <div id="studentHistory"></div>
+      </section>
+    </div>
+  </main>
+</section>
+
+<!-- TEACHER DASHBOARD -->
+<section id="teacherDashboard" class="page hidden">
+  <header class="topbar teacher-topbar">
+    <div class="brand compact">
+      <div class="brand-logo teacher-logo">T</div>
+      <div>
+        <h2>GEC Dahod</h2>
+        <p>Teacher Portal</p>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <span id="teacherHeaderName" class="user-name"></span>
+      <button id="teacherLogout" type="button" class="outline-btn">Logout</button>
+    </div>
+  </header>
+
+  <main class="dashboard">
+    <section class="hero teacher-hero">
+      <div>
+        <div class="eyebrow">TEACHER CONTROL CENTER</div>
+        <h2>Create a Live Attendance Session</h2>
+        <p>Generate a one-time 6-digit code and share it with the class.</p>
+      </div>
+      <div class="hero-icon">🛡️</div>
+    </section>
+
+    <div class="content-grid">
+      <section class="card">
+        <div class="card-heading">
+          <div>
+            <h3>New Attendance Session</h3>
+            <p>Each session gets a new code and expires after 60 seconds.</p>
+          </div>
+        </div>
+
+        <label for="subject">Subject</label>
+        <input id="subject" type="text" placeholder="Engineering Mathematics-I">
+
+        <label for="className">Class / Division</label>
+        <input id="className" type="text" placeholder="CE Semester 1 - A">
+
+        <button id="createSessionBtn" type="button" class="primary-btn teacher-btn">
+          Generate Attendance Code
+        </button>
+
+        <div id="activeSessionBox" class="active-session hidden">
+          <div class="eyebrow dark">ACTIVE SESSION</div>
+
+          <div class="session-line">
+            <div>
+              <span class="meta-label">Session ID</span>
+              <strong id="activeSessionId"></strong>
+            </div>
+            <button id="copySessionBtn" type="button" class="mini-btn">Copy</button>
+          </div>
+
+          <div class="big-code" id="activeCode">000000</div>
+
+          <div id="teacherCountdown" class="countdown">60s</div>
+
+          <div id="activeMeta" class="session-meta"></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-heading">
+          <div>
+            <h3>My Sessions</h3>
+            <p>Click a session to see its attendance.</p>
+          </div>
+        </div>
+        <div id="teacherSessionList"></div>
+      </section>
+    </div>
+
+    <section id="teacherAttendanceCard" class="card hidden">
+      <div class="table-heading">
+        <div>
+          <div class="eyebrow dark">SESSION ATTENDANCE</div>
+          <h3 id="teacherAttendanceTitle">Attendance</h3>
+        </div>
+        <button id="refreshAttendanceBtn" type="button" class="outline-btn">Refresh</button>
+      </div>
+      <div id="attendanceSummary" class="summary-row"></div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Student</th>
+              <th>Enrollment</th>
+              <th>Time</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="attendanceTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</section>
+
+<script type="module" src="script.js"></script>
+</body>
+</html>
